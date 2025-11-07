@@ -3,9 +3,7 @@ package fr.fullstack.shopapp.controller;
 import fr.fullstack.shopapp.model.Category;
 import fr.fullstack.shopapp.service.CategoryService;
 import fr.fullstack.shopapp.util.ErrorValidation;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/categories")
@@ -31,7 +29,7 @@ public class CategoryController {
     @Autowired
     private CategoryService service;
 
-    @ApiOperation(value = "Create a category")
+    @Operation(description = "Create a category")
     @PostMapping
     public ResponseEntity<Category> createCategory(@Valid @RequestBody Category category, Errors errors) {
         if (errors.hasErrors()) {
@@ -46,7 +44,7 @@ public class CategoryController {
         }
     }
 
-    @ApiOperation(value = "Delete a category by its id")
+    @Operation(description = "Delete a category by its id")
     @DeleteMapping("/{id}")
     public HttpStatus deleteCategory(@PathVariable long id) {
         try {
@@ -57,9 +55,9 @@ public class CategoryController {
         }
     }
 
-    @ApiOperation(value = "Get categories")
+    @Operation(description = "Get categories")
     @GetMapping
-    @ApiImplicitParams({
+    /*@ApiImplicitParams({
             @ApiImplicitParam(name = "page",
                               dataType = "integer",
                               paramType = "query",
@@ -67,12 +65,12 @@ public class CategoryController {
                               defaultValue = "0"),
             @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query",
                               value = "Number of records per page", defaultValue = "5"),
-    })
+    })*/
     public ResponseEntity<Page<Category>> getAllCategories(Pageable pageable) {
         return ResponseEntity.ok(service.getCategoryList(pageable));
     }
 
-    @ApiOperation(value = "Get a category by id")
+    @Operation(description = "Get a category by id")
     @GetMapping("/{id}")
     public ResponseEntity<Category> getCategoryById(@PathVariable long id) {
         try {
@@ -82,7 +80,7 @@ public class CategoryController {
         }
     }
 
-    @ApiOperation(value = "Update a category")
+    @Operation(description = "Update a category")
     @PutMapping
     public ResponseEntity<Category> updateCategory(@Valid @RequestBody Category category, Errors errors) {
         if (errors.hasErrors()) {
