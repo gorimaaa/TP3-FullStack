@@ -1,4 +1,4 @@
-package fr.fullstack.shopapp.config;
+/*package fr.fullstack.shopapp.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -21,3 +21,4 @@ public class DocConfig {
                 );
     }
 }
+*/
