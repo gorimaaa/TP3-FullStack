@@ -36,7 +36,9 @@ const Categories = () => {
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5 }}>
-            <Typography variant="h2">Les catégories</Typography>
+            <Typography variant="h2" sx={{ fontSize: { xs: '2rem', md: '3.75rem' }, textAlign: 'center' }}>
+                Les catégories
+            </Typography>
 
             <Box
                 sx={{
@@ -53,9 +55,9 @@ const Categories = () => {
             </Box>
 
             {/* Categories */}
-            <Grid container alignItems="center" rowSpacing={3} columnSpacing={3}>
+            <Grid container alignItems="stretch" rowSpacing={3} columnSpacing={3}>
                 {categories?.map((category) => (
-                    <Grid item key={category.id} xs={4}>
+                    <Grid item key={category.id} xs={12} sm={6} md={4}>
                         <CategoryCard category={category} />
                     </Grid>
                 ))}

@@ -56,15 +56,25 @@ const ProductDetails = () => {
             elevation={1}
             sx={{
                 position: 'relative',
-                padding: 4,
+                padding: { xs: 2, md: 4 },
             }}
         >
             <ActionButtons handleDelete={handleDelete} handleEdit={handleEdit} />
 
-            <Typography variant="h3" sx={{ textAlign: 'center', marginBottom: 3 }}>
+            <Typography
+                variant="h3"
+                sx={{
+                    textAlign: 'center',
+                    marginBottom: 3,
+                    fontSize: { xs: '1.75rem', md: '3rem' },
+                    wordBreak: 'break-word',
+                }}
+            >
                 {formattedProduct.name}
             </Typography>
-            <Typography variant="h6">Prix : {priceFormatter(formattedProduct.price)}</Typography>
+            <Typography variant="h6" sx={{ fontSize: { xs: '1rem', md: '1.25rem' } }}>
+                Prix : {priceFormatter(formattedProduct.price)}
+            </Typography>
             {formattedProduct.description && (
                 <Typography sx={{ mt: 1.5 }} color="text.secondary">
                     Description : {formattedProduct.description}

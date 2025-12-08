@@ -18,12 +18,35 @@ const ShopCard = ({ shop }: Props) => {
     };
 
     return (
-        <Card sx={{ minWidth: 275, cursor: 'pointer' }} onClick={handleClick}>
+        <Card
+            sx={{
+                width: '100%',
+                cursor: 'pointer',
+                height: '100%', // Ensure equal height in grid
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                transition: 'transform 0.2s',
+                '&:hover': {
+                    transform: 'scale(1.02)',
+                },
+            }}
+            onClick={handleClick}
+        >
             <CardContent>
-                <Typography variant="h4" color="text.primary" gutterBottom sx={{ textAlign: 'center' }}>
+                <Typography
+                    variant="h4"
+                    color="text.primary"
+                    gutterBottom
+                    sx={{
+                        textAlign: 'center',
+                        fontSize: { xs: '1.5rem', md: '2.125rem' }, // Responsive font size
+                        wordBreak: 'break-word',
+                    }}
+                >
                     {shop.name}
                 </Typography>
-                <Typography variant="h6">
+                <Typography variant="h6" sx={{ fontSize: { xs: '1rem', md: '1.25rem' } }}>
                     {shop.nbProducts} {pluralize('produit', shop.nbProducts)}
                 </Typography>
                 <Typography sx={{ my: 1.5 }} color="text.secondary">

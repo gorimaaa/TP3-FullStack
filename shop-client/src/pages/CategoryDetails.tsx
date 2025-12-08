@@ -50,12 +50,19 @@ const CategoryDetails = () => {
             elevation={1}
             sx={{
                 position: 'relative',
-                padding: 4,
+                padding: { xs: 2, md: 4 },
             }}
         >
             <ActionButtons handleDelete={handleDelete} handleEdit={handleEdit} />
 
-            <Typography variant="h3" sx={{ textAlign: 'center' }}>
+            <Typography
+                variant="h3"
+                sx={{
+                    textAlign: 'center',
+                    fontSize: { xs: '1.75rem', md: '3rem' },
+                    wordBreak: 'break-word',
+                }}
+            >
                 {category.name}
             </Typography>
         </Paper>

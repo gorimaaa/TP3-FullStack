@@ -68,15 +68,23 @@ const ShopDetails = () => {
             elevation={1}
             sx={{
                 position: 'relative',
-                padding: 4,
+                padding: { xs: 2, md: 4 },
             }}
         >
             <ActionButtons handleDelete={handleDelete} handleEdit={handleEdit} />
 
-            <Typography variant="h3" sx={{ textAlign: 'center', marginBottom: 3 }}>
+            <Typography
+                variant="h3"
+                sx={{
+                    textAlign: 'center',
+                    marginBottom: 3,
+                    fontSize: { xs: '1.75rem', md: '3rem' },
+                    wordBreak: 'break-word',
+                }}
+            >
                 {shop.name}
             </Typography>
-            <Typography variant="h6">
+            <Typography variant="h6" sx={{ fontSize: { xs: '1rem', md: '1.25rem' } }}>
                 Cette boutique comporte {shop.nbProducts} {pluralize('produit', shop.nbProducts)}
             </Typography>
             <Typography sx={{ my: 1 }}>
@@ -95,14 +103,15 @@ const ShopDetails = () => {
                     my: 4,
                 }}
             >
-                <Typography variant="h4" sx={{ mb: 2 }}>
+                <Typography variant="h4" sx={{ mb: 2, fontSize: { xs: '1.5rem', md: '2.125rem' } }}>
                     Horaires d&apos;ouverture :
                 </Typography>
                 {shop.openingHours.map((openingHour) => (
                     <Box
                         key={openingHour.id}
                         sx={{
-                            width: 200,
+                            width: '100%',
+                            maxWidth: 300,
                             display: 'flex',
                             flexDirection: 'row',
                             alignItems: 'center',
@@ -117,7 +126,7 @@ const ShopDetails = () => {
                 ))}
             </Box>
 
-            <Typography variant="h4" sx={{ textAlign: 'center', mb: 2 }}>
+            <Typography variant="h4" sx={{ textAlign: 'center', mb: 2, fontSize: { xs: '1.5rem', md: '2.125rem' } }}>
                 Les produits :
             </Typography>
             {id && <ShopProducts shopId={id} />}
