@@ -30,3 +30,7 @@ export function editShop(shop: MinimalShop): Promise<AxiosResponse<Shop>> {
 export function deleteShop(id: string): Promise<AxiosResponse<Shop>> {
     return axios.delete(`${import.meta.env.VITE_API_URL}/shops/${id}`);
 }
+
+export function searchShops(query: string): Promise<AxiosResponse<Shop[]>> {
+    return axios.get(`${import.meta.env.VITE_API_URL}/shops/search?q=${encodeURIComponent(query)}`);
+}

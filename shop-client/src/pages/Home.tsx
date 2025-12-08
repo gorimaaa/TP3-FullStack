@@ -8,6 +8,7 @@ import {
     Pagination,
     Select,
     SelectChangeEvent,
+    TextField,
     Typography,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -15,12 +16,13 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Filters, ShopCard } from '../components';
 import { useAppContext } from '../context';
-import { ShopService } from '../services';
+import * as ShopService from '../services/ShopService';
 import { ResponseArray, Shop } from '../types';
 
 const Home = () => {
     const navigate = useNavigate();
     const { setLoading } = useAppContext();
+
     const [shops, setShops] = useState<Shop[] | null>(null);
     const [count, setCount] = useState<number>(0);
     const [page, setPage] = useState<number>(0);
@@ -29,8 +31,26 @@ const Home = () => {
     const [sort, setSort] = useState<string>('');
     const [filters, setFilters] = useState<string>('');
 
+    // 🔎 Recherche plein texte
+    const [search, setSearch] = useState<string>('');
+
     const getShops = () => {
         setLoading(true);
+
+        // 🔎 Mode recherche plein texte : on ignore tri/pagination backend
+        if (search.trim().length > 0) {
+            ShopService.searchShops(search.trim())
+                .then((res) => {
+                    setShops(res.data); // la liste de Shop renvoyée par /shops/search
+                    setCount(1);        // une seule "page" logique en mode recherche
+                    setPage(1);
+                })
+                .finally(() => setLoading(false));
+
+            return;
+        }
+
+        // 🧮 Mode normal : tri + filtres + pagination
         let promisedShops: Promise<ResponseArray<Shop>>;
         if (sort) {
             promisedShops = ShopService.getShopsSorted(pageSelected, 9, sort);
@@ -39,8 +59,10 @@ const Home = () => {
         } else {
             promisedShops = ShopService.getShops(pageSelected, 9);
         }
+
         promisedShops
-            .then((res) => {
+            .then((res: any) => {
+                // res est ResponseArray<Shop> d'après ton type
                 setShops(res.data.content);
                 setCount(res.data.totalPages);
                 setPage(res.data.pageable.pageNumber + 1);
@@ -50,7 +72,7 @@ const Home = () => {
 
     useEffect(() => {
         getShops();
-    }, [pageSelected, sort, filters]);
+    }, [pageSelected, sort, filters, search]);
 
     const handleChangePagination = (event: React.ChangeEvent<unknown>, value: number) => {
         setPageSelected(value - 1);
@@ -58,6 +80,12 @@ const Home = () => {
 
     const handleChangeSort = (event: SelectChangeEvent) => {
         setSort(event.target.value as string);
+    };
+
+    const handleChangeSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearch(event.target.value);
+        // Quand on commence une nouvelle recherche, on revient à la "page" 0
+        setPageSelected(0);
     };
 
     return (
@@ -78,20 +106,22 @@ const Home = () => {
                 </Fab>
             </Box>
 
-            {/* Sort and filters */}
+            {/* Sort, filtres et barre de recherche */}
             <Box
                 sx={{
                     width: '100%',
                     display: 'flex',
                     flexDirection: 'row',
                     justifyContent: 'space-between',
+                    gap: 2,
+                    alignItems: 'center',
                 }}
             >
                 <FormControl sx={{ minWidth: 200 }}>
-                    <InputLabel id="demo-simple-select-label">Trier par</InputLabel>
+                    <InputLabel id="sort-select-label">Trier par</InputLabel>
                     <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
+                        labelId="sort-select-label"
+                        id="sort-select"
                         value={sort}
                         label="Trier par"
                         onChange={handleChangeSort}
@@ -106,6 +136,16 @@ const Home = () => {
                 </FormControl>
 
                 <Filters setUrlFilters={setFilters} setSort={setSort} sort={sort} />
+
+                {/* 🔎 Barre de recherche plein texte */}
+                <TextField
+                    label="Rechercher une boutique"
+                    variant="outlined"
+                    size="small"
+                    value={search}
+                    onChange={handleChangeSearch}
+                    sx={{ maxWidth: 300, width: '100%' }}
+                />
             </Box>
 
             {/* Shops */}
@@ -117,9 +157,18 @@ const Home = () => {
                 ))}
             </Grid>
 
-            {/* Pagination */}
+            {/* Pagination :
+                - active uniquement en mode "liste" classique
+                - en mode recherche, on affiche juste un texte
+            */}
             {shops?.length !== 0 ? (
-                <Pagination count={count} page={page} siblingCount={1} onChange={handleChangePagination} />
+                search.trim().length === 0 ? (
+                    <Pagination count={count} page={page} siblingCount={1} onChange={handleChangePagination} />
+                ) : (
+                    <Typography variant="body2" sx={{ mt: -1 }}>
+                        Résultats de la recherche : {shops?.length} boutique(s)
+                    </Typography>
+                )
             ) : (
                 <Typography variant="h5" sx={{ mt: -1 }}>
                     Aucune boutique correspondante

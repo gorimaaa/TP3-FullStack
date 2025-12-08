@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.validation.Valid;
+
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -109,5 +111,10 @@ public class ShopController {
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
+    }
+
+    @GetMapping("/search")
+    public List<Shop> searchShops(@RequestParam("q") String query) {
+        return service.searchByName(query);
     }
 }

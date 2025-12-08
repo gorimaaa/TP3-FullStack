@@ -9,6 +9,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.hibernate.search.mapper.orm.Search;
+import org.hibernate.search.mapper.orm.session.SearchSession;
+import jakarta.persistence.EntityManager;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -165,4 +168,18 @@ public class ShopService {
 
         return null;
     }
+
+    @Transactional(readOnly = true)
+    public List<Shop> searchByName(String text) {
+        SearchSession searchSession = Search.session(em);
+
+        return searchSession.search(Shop.class)
+                .where(f -> f.match()
+                        .field("name")
+                        .matching(text)
+                        .fuzzy(2)  // distance d’édition max = 1 (insertion/suppression/substitution)
+                )
+                .fetchHits(20);
+    }
+
 }
