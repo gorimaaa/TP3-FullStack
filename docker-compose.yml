@@ -3,7 +3,7 @@ version: "3.9"
 services:
   db:
     container_name: shop-db
-    image: postgres:15
+    image: postgres:18
     hostname: "psql_docker"
     ports:
       - "5432:5432"
@@ -12,9 +12,9 @@ services:
       POSTGRES_PASSWORD: "1234"
       PGDATA: /data/postgres
     volumes:
-      - postgres:/data/postgres
-      - ./shop-server/sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
-      - ./shop-server/sql/fill_tables.sql:/docker-entrypoint-initdb.d/fill_tables.sql
+      - postgres18:/data/postgres
+      #- ./shop-server/sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+      #- ./shop-server/sql/fill_tables.sql:/docker-entrypoint-initdb.d/fill_tables.sql
     networks:
       - postgres
     
@@ -57,4 +57,4 @@ networks:
     driver: bridge
 
 volumes:
-  postgres:
+  postgres18:
