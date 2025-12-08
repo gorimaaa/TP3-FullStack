@@ -8,11 +8,12 @@ import {
     InputLabel,
     MenuItem,
     Select,
-    TextField,
+    useMediaQuery,
+    useTheme,
 } from '@mui/material';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { Dayjs } from 'dayjs';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
@@ -54,6 +55,9 @@ const Filters = ({ setUrlFilters, setSort, sort }: Props) => {
     const [open, setOpen] = useState<boolean>(false);
     const [filters, setFilters] = useState<FiltersType>(defaultFilters);
 
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
     useEffect(() => {
         if (sort) setFilters(defaultFilters);
     }, [sort]);
@@ -70,7 +74,7 @@ const Filters = ({ setUrlFilters, setSort, sort }: Props) => {
         setFilters(defaultFilters);
     };
 
-    const handleChange = (key: string, value: string | Dayjs | undefined | null) =>
+    const handleChange = (key: string, value: string | Dayjs | null | undefined) =>
         setFilters({ ...filters, [key]: value });
 
     const handleValidate = () => {
@@ -81,11 +85,11 @@ const Filters = ({ setUrlFilters, setSort, sort }: Props) => {
 
     return (
         <>
-            <Button variant="contained" onClick={handleClickButton}>
+            <Button variant="contained" onClick={handleClickButton} fullWidth={fullScreen}>
                 Filtrer
             </Button>
 
-            <Dialog open={open} onClose={handleClose}>
+            <Dialog open={open} onClose={handleClose} fullScreen={fullScreen}>
                 <DialogTitle>Filtrer les boutiques</DialogTitle>
 
                 <DialogContent>
@@ -109,24 +113,24 @@ const Filters = ({ setUrlFilters, setSort, sort }: Props) => {
 
                 <DialogContent>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DesktopDatePicker
+                        <DatePicker
                             label="Créée après"
-                            inputFormat="DD/MM/YYYY"
+                            format="DD/MM/YYYY"
                             value={filters.createdAfter}
                             onChange={(v: Dayjs | null) => handleChange('createdAfter', v)}
-                            renderInput={(params) => <TextField {...params} />}
+                            slotProps={{ textField: { fullWidth: true } }}
                         />
                     </LocalizationProvider>
                 </DialogContent>
 
                 <DialogContent>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DesktopDatePicker
+                        <DatePicker
                             label="Créée avant"
-                            inputFormat="DD/MM/YYYY"
+                            format="DD/MM/YYYY"
                             value={filters.createdBefore}
                             onChange={(v: Dayjs | null) => handleChange('createdBefore', v)}
-                            renderInput={(params) => <TextField {...params} />}
+                            slotProps={{ textField: { fullWidth: true } }}
                         />
                     </LocalizationProvider>
                 </DialogContent>

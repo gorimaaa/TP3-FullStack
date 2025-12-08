@@ -90,7 +90,9 @@ const Home = () => {
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5 }}>
-            <Typography variant="h2">Les boutiques</Typography>
+            <Typography variant="h2" sx={{ fontSize: { xs: '2rem', md: '3.75rem' }, textAlign: 'center' }}>
+                Les boutiques
+            </Typography>
 
             <Box
                 sx={{
@@ -111,13 +113,13 @@ const Home = () => {
                 sx={{
                     width: '100%',
                     display: 'flex',
-                    flexDirection: 'row',
+                    flexDirection: { xs: 'column', md: 'row' },
                     justifyContent: 'space-between',
                     gap: 2,
-                    alignItems: 'center',
+                    alignItems: { xs: 'stretch', md: 'center' },
                 }}
             >
-                <FormControl sx={{ minWidth: 200 }}>
+                <FormControl sx={{ minWidth: { xs: '100%', md: 200 } }}>
                     <InputLabel id="sort-select-label">Trier par</InputLabel>
                     <Select
                         labelId="sort-select-label"
@@ -144,14 +146,14 @@ const Home = () => {
                     size="small"
                     value={search}
                     onChange={handleChangeSearch}
-                    sx={{ maxWidth: 300, width: '100%' }}
+                    sx={{ maxWidth: { xs: '100%', md: 300 }, width: '100%' }}
                 />
             </Box>
 
             {/* Shops */}
-            <Grid container alignItems="center" rowSpacing={3} columnSpacing={3}>
+            <Grid container alignItems="stretch" rowSpacing={3} columnSpacing={3}>
                 {shops?.map((shop) => (
-                    <Grid item key={shop.id} xs={4}>
+                    <Grid item key={shop.id} xs={12} sm={6} md={4}>
                         <ShopCard shop={shop} />
                     </Grid>
                 ))}

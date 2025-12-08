@@ -36,7 +36,9 @@ const Products = () => {
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5 }}>
-            <Typography variant="h2">Les produits</Typography>
+            <Typography variant="h2" sx={{ fontSize: { xs: '2rem', md: '3.75rem' }, textAlign: 'center' }}>
+                Les produits
+            </Typography>
 
             <Box
                 sx={{
@@ -53,9 +55,9 @@ const Products = () => {
             </Box>
 
             {/* Products */}
-            <Grid container alignItems="center" rowSpacing={3} columnSpacing={3}>
+            <Grid container alignItems="stretch" rowSpacing={3} columnSpacing={3}>
                 {products?.map((product) => (
-                    <Grid item key={product.id} xs={4}>
+                    <Grid item key={product.id} xs={12} sm={6} md={4}>
                         <ProductCard product={product} displayShop={true} />
                     </Grid>
                 ))}

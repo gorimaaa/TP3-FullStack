@@ -12,9 +12,31 @@ const CategoryCard = ({ category }: Props) => {
     const navigate = useNavigate();
 
     return (
-        <Card sx={{ cursor: 'pointer' }} onClick={() => navigate(`/category/${category.id}`)}>
+        <Card
+            sx={{
+                cursor: 'pointer',
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'transform 0.2s',
+                '&:hover': {
+                    transform: 'scale(1.02)',
+                },
+            }}
+            onClick={() => navigate(`/category/${category.id}`)}
+        >
             <CardContent>
-                <Typography variant="h5" color="text.primary" sx={{ textAlign: 'center' }}>
+                <Typography
+                    variant="h5"
+                    color="text.primary"
+                    sx={{
+                        textAlign: 'center',
+                        fontSize: { xs: '1.25rem', md: '1.5rem' },
+                        wordBreak: 'break-word',
+                    }}
+                >
                     {category.name}
                 </Typography>
             </CardContent>
