@@ -20,10 +20,12 @@ services:
     
   elasticsearch:
     container_name: shop-elasticsearch
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.25
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.2.2
     hostname: "elasticsearch_docker"
     environment:
-      discovery.type: single-node
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
     ports:
       - "9200:9200"
     networks:
