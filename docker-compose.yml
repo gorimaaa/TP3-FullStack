@@ -10,11 +10,11 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: "1234"
-      PGDATA: /data/postgres
+      PGDATA: /data/postgres_data3
     volumes:
       - postgres18:/data/postgres
       - ./shop-server/sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
-      - ./shop-server/sql/fill_tables.sql:/docker-entrypoint-initdb.d/fill_tables.sql
+      - ./shop-server/sql/data_only.sql:/docker-entrypoint-initdb.d/data_only.sql
     networks:
       - postgres
     
@@ -41,6 +41,7 @@ services:
       - "8080:8080"
     networks:
       - postgres
+    restart: always
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
       - SPRING_DATASOURCE_USERNAME=postgres
@@ -49,6 +50,8 @@ services:
       - ES_URL=elasticsearch:9200
 
   front:
+    depends_on:
+      - "api"
     container_name: shop-client
     build: ./shop-client
     ports:
