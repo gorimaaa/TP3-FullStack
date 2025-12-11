@@ -20,7 +20,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ShopService } from '../services';
 import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { MinimalShop, ObjectPropertyString } from '../types';
 import { useAppContext, useToastContext } from '../context';
 
@@ -88,7 +88,7 @@ const ShopForm = () => {
     }, [isAddMode]);
 
     const handleChange = (index: number, key: string, value: number | string | undefined) => {
-        const openingHours = shop.openingHours;
+        const openingHours = [...shop.openingHours];
         const openingHour = {
             ...openingHours[index],
             [key]: value,
@@ -98,7 +98,10 @@ const ShopForm = () => {
     };
 
     const handleClickAddHours = () => {
-        setShop({ ...shop, openingHours: [...shop.openingHours, { day: 1, openAt: '09:00:00', closeAt: '18:00:00' }] });
+        setShop({
+            ...shop,
+            openingHours: [...shop.openingHours, { day: 1, openAt: '09:00:00', closeAt: '18:00:00' }],
+        });
     };
 
     const handleClickClearHours = (index: number) => {
@@ -177,13 +180,13 @@ const ShopForm = () => {
                                     }}
                                 >
                                     <FormControl sx={{ marginBottom: 2 }}>
-                                        <InputLabel id="demo-simple-select-label">Jour</InputLabel>
+                                        <InputLabel id={`day-select-label-${index}`}>Jour</InputLabel>
                                         <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
+                                            labelId={`day-select-label-${index}`}
+                                            id={`day-select-${index}`}
                                             value={openingHour.day}
                                             label="Jour"
-                                            onChange={(e) => handleChange(index, 'day', e.target.value)}
+                                            onChange={(e) => handleChange(index, 'day', e.target.value as number)}
                                             sx={{ minWidth: 125 }}
                                         >
                                             <MenuItem value={1}>Lundi</MenuItem>
@@ -199,9 +202,11 @@ const ShopForm = () => {
                                         <TimePicker
                                             label="Ouvre à"
                                             ampm={false}
-                                            value={`2014-08-18T${openingHour.openAt}`}
+                                            value={
+                                                openingHour.openAt ? dayjs(`2014-08-18T${openingHour.openAt}`) : null
+                                            }
                                             onChange={(v: Dayjs | null) =>
-                                                handleChange(index, 'openAt', v?.format('HH:mm:ss'))
+                                                handleChange(index, 'openAt', v ? v.format('HH:mm:ss') : undefined)
                                             }
                                             renderInput={(params) => <TextField {...params} />}
                                         />
@@ -210,9 +215,11 @@ const ShopForm = () => {
                                         <TimePicker
                                             label="Ferme à"
                                             ampm={false}
-                                            value={`2014-08-18T${openingHour.closeAt}`}
+                                            value={
+                                                openingHour.closeAt ? dayjs(`2014-08-18T${openingHour.closeAt}`) : null
+                                            }
                                             onChange={(v: Dayjs | null) =>
-                                                handleChange(index, 'closeAt', v?.format('HH:mm:ss'))
+                                                handleChange(index, 'closeAt', v ? v.format('HH:mm:ss') : undefined)
                                             }
                                             renderInput={(params) => <TextField {...params} />}
                                         />
