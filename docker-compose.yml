@@ -10,7 +10,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: "1234"
-      PGDATA: /data/postgres_data3
+      PGDATA: /data/postgres18
     volumes:
       - postgres18:/data/postgres
       - ./shop-server/sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
